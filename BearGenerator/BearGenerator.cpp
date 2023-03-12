@@ -1,21 +1,27 @@
 #include "BearGenerator.h"
 #include <time.h>
 
+BearGenerator* BearGenerator::_instance = nullptr;
+
 BearGenerator* BearGenerator::GetInstance()
 {
-	if (instance == nullptr)
+	if (_instance == nullptr)
 	{
-		instance = new BearGenerator();
+		_instance = new BearGenerator();
 	}
 
-	return instance;
+	return _instance;
 }
 
 BearGenerator::BearGenerator()
 {
 }
 
-std::vector<std::string> BearGenerator::getTypes()
+BearGenerator::~BearGenerator()
+{
+}
+
+std::vector<std::string> BearGenerator::GetTypes()
 {
 
 	std::string arr[] =
@@ -37,7 +43,7 @@ std::vector<std::string> BearGenerator::getTypes()
 	return types;
 }
 
-std::vector<std::string> BearGenerator::getColors()
+std::vector<std::string> BearGenerator::GetColors()
 {
 
 	std::string arr[] =
@@ -59,7 +65,13 @@ std::vector<std::string> BearGenerator::getColors()
 	return colors;
 }
 
-std::vector<std::string> BearGenerator::getFoods()
+void BearGenerator::ResetInstance()
+{
+	delete _instance;
+	_instance = nullptr;
+}
+
+std::vector<std::string> BearGenerator::GetFoods()
 {
 
 	std::string arr[] =
@@ -78,24 +90,24 @@ std::vector<std::string> BearGenerator::getFoods()
 	return foods;
 }
 
-Bear BearGenerator::createRandomBear()
+Bear& BearGenerator::createRandomBear()
 {
-	std::srand(0U);
+	auto colors = this->GetColors();
+	auto foods = this->GetFoods();
+	auto types = this->GetTypes();
 
-	auto colors = this->getColors();
-	auto foods = this->getFoods();
-	auto types = this->getTypes();
-
-	std::string color = colors[this->RandomNumber(0, colors.size())];
-	std::string food = foods[this->RandomNumber(0, foods.size())];
-	std::string type = types[this->RandomNumber(0, types.size())];
+	std::string color = colors[this->RandomNumber(0, colors.size() - 1)];
+	std::string food = foods[this->RandomNumber(0, foods.size() - 1)];
+	std::string type = types[this->RandomNumber(0, types.size() - 1)];
 
 	int weight = this->RandomNumber(250, 1500);
 
-	return Bear(type, color, weight, food);
+	auto value = new Bear(type, color, weight, food);
+
+	return *value;
 }
 
 int BearGenerator::RandomNumber(int min, int max)
 {
-	return (int)(1 + (std::rand() / (RAND_MAX / (max - min))));
+	return (int)(rand() % (max - min + 1) + min);
 }

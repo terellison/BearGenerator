@@ -5,22 +5,27 @@
 class BearGenerator
 {
 private:
-	static BearGenerator* instance;
+	static BearGenerator* _instance;
 
 protected:
 	BearGenerator();
+	~BearGenerator();
 public:
 	BearGenerator(const BearGenerator& other) = delete;
 
+	void operator=(BearGenerator& other) = delete;
+
 	static BearGenerator* GetInstance();
 
-	std::vector<std::string> getTypes();
+	static void ResetInstance();
 
-	std::vector<std::string> getColors();
+	std::vector<std::string> GetTypes();
 
-	std::vector<std::string> getFoods();
+	std::vector<std::string> GetColors();
 
-	Bear createRandomBear();
+	std::vector<std::string> GetFoods();
+
+	Bear& createRandomBear();
 
 	int RandomNumber(int min, int max);
 	

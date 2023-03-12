@@ -6,7 +6,6 @@ Bear::Bear(std::string type, std::string color, int weight, std::string favorite
 	this->type = type;
 	this->color = color;
 	this->weight = weight;
-	std::srand(0U);
 
 	if (this->weight == 700 || this->type == "Little Bear" || this->type == "Baby Bear")
 	{
